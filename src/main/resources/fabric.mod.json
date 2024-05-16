@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "sypwid",
+  "version": "${version}",
+  "name": "SypWid",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.com/Mrsypz/SypWid"
+  },
+  "license": "All-Rights-Reserved",
+  "icon": "assets/sypwid/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "sypztep.sypwid.client.SypWidClient"
+    ],
+    "modmenu": [
+      "sypztep.sypwid.compat.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "sypwid.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
