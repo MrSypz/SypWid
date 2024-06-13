@@ -9,9 +9,56 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 @Config.Gui.Background("minecraft:textures/block/dirt.png")
 
 public class SypWidConfig implements ConfigData {
-    @Comment("Get anyslot but not for offhand.")
-    @ConfigEntry.Category("gameplay")
+    @Comment("New Healthbar")
+    @ConfigEntry.Category("visual")
     public boolean newHealthbar = true;
-    @ConfigEntry.Category("gameplay")
+    @ConfigEntry.Category("visual")
+    public boolean newArmor = true;
+    @ConfigEntry.Category("visual")
+    public boolean newAir = true;
+    @ConfigEntry.Category("visual")
     public boolean textHealthNumber = true;
+    @ConfigEntry.Category("visual")
+    public boolean textArmorNumber = true;
+    @ConfigEntry.Category("visual")
+    public boolean textArmorToughnessNumber = true;
+    @ConfigEntry.Category("speedometer")
+    public boolean enableSpeedOmeter = true;
+    @ConfigEntry.Category("speedometer")
+    public boolean showVertical = false;
+    @ConfigEntry.Category("speedometer")
+    public boolean changeColors = true;
+
+    @ConfigEntry.Category("speedometer")
+    @ConfigEntry.BoundedDiscrete(max = 100, min = 1)
+    @ConfigEntry.Gui.Tooltip(count = 2)
+    public int tickInterval = 15;
+
+    @ConfigEntry.Category("speedometer")
+    @ConfigEntry.ColorPicker
+    public int textColor = 0xFFFFFF;
+
+    @ConfigEntry.Category("speedometer")
+    @ConfigEntry.ColorPicker
+    public int acceleratingColor = 0x00FF00;
+
+    @ConfigEntry.Category("speedometer")
+    @ConfigEntry.ColorPicker
+    public int deceleratingColor = 0xFF0000;
+
+    @ConfigEntry.Category("speedometer")
+    @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+    public Position position = Position.BOTTOM_LEFT;
+
+    @ConfigEntry.Category("speedometer")
+    @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+    public SpeedUnit speedUnit = SpeedUnit.BLOCKS_PER_SECOND;
+
+    public enum Position {
+        BOTTOM_LEFT, BOTTOM_RIGHT, TOP_LEFT, TOP_RIGHT
+    }
+
+    public enum SpeedUnit {
+        BLOCKS_PER_SECOND, KILOMETERS_PER_HOUR
+    }
 }

@@ -1,0 +1,24 @@
+{
+  "text.autoconfig.sypwid.category.speedometer": "Speed O Meter",
+  "text.autoconfig.sypwid.category.visual": "Gui Overhaul",
+
+  "text.autoconfig.sypwid.option.newHealthbar": "New HealthBar",
+  "text.autoconfig.sypwid.category.newArmor": "New Armor",
+  "text.autoconfig.sypwid.category.newAir": "New Air",
+  "text.autoconfig.sypwid.category.textHealthNumber": "Text Health",
+  "text.autoconfig.sypwid.category.textArmorNumber": "Text Armor",
+  "text.autoconfig.sypwid.category.textArmorToughnessNumber": "Text ArmorToughness",
+
+  "text.autoconfig.sypwid.title": "Sypwid Options",
+  "text.autoconfig.sypwid.option.enabled": "Mod enabled",
+  "text.autoconfig.sypwid.option.showVertical": "Show vertical speed",
+  "text.autoconfig.sypwid.option.changeColors": "Enable changing text color",
+  "text.autoconfig.sypwid.option.tickInterval": "Color update rate",
+  "text.autoconfig.sypwid.option.tickInterval.@Tooltip[0]": "Higher values will prevent the colors from flashing,",
+  "text.autoconfig.sypwid.option.tickInterval.@Tooltip[1]": "but may introduce some latency to the color changing effect",
+  "text.autoconfig.sypwid.option.textColor": "Text color",
+  "text.autoconfig.sypwid.option.acceleratingColor": "Accelerating text color",
+  "text.autoconfig.sypwid.option.deceleratingColor": "Decelerating text color",
+  "text.autoconfig.sypwid.option.position": "Position",
+  "text.autoconfig.sypwid.option.speedUnit": "Speed Unit"
+}

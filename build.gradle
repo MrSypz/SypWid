@@ -10,6 +10,10 @@ base {
     archivesName = project.archives_base_name
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/sypwid.accesswidener")
+}
+
 repositories {
     maven { url 'https://jitpack.io' }
     maven {
@@ -41,8 +45,6 @@ dependencies {
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 
     modRuntimeOnly "maven.modrinth:sodium:${sodium_version}"
-
-    modApi include('com.github.MrSypz:sypzalib:v0.0.3-alpha')
 }
 
 processResources {
