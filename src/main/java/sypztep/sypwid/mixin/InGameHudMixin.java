@@ -28,11 +28,11 @@ import sypztep.sypwid.client.HealthBar;
 @Environment(EnvType.CLIENT)
 public abstract class InGameHudMixin {
     @Unique
-    private static final Identifier ARMOR_TEXTURE = new Identifier("hud/armor_full");
+    private static final Identifier ARMOR_TEXTURE =  Identifier.ofVanilla("hud/armor_full");
     @Unique
-    private static final Identifier AIR_TEXTURE = new Identifier("hud/air");
+    private static final Identifier AIR_TEXTURE =  Identifier.ofVanilla("hud/air");
     @Unique
-    private static final Identifier AIR_BURSTING_TEXTURE = new Identifier("hud/air_bursting");
+    private static final Identifier AIR_BURSTING_TEXTURE =  Identifier.ofVanilla("hud/air_bursting");
 
     @Shadow
     public abstract TextRenderer getTextRenderer();

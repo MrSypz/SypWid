@@ -11,7 +11,7 @@ import sypztep.sypwid.event.SpeedOmeterRenderEvent;
 public class SypWidClient implements ClientModInitializer {
     public static final String MODID = "sypwid";
     public static Identifier id(String id) {
-        return new Identifier(MODID, id);
+        return Identifier.of(MODID, id);
     }
     public static SypWidConfig CONFIG = new SypWidConfig();
     @Override

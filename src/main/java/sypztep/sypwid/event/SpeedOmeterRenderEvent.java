@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -17,10 +18,10 @@ public class SpeedOmeterRenderEvent implements HudRenderCallback {
     private int vertColor = SypWidClient.CONFIG.textColor;
     private double lastFrameSpeed = 0.0;
     private double lastFrameVertSpeed = 0.0;
-    private float tickCounter = 0.0f;
+//    private float tickCounter = 0.0f;
 
     @Override
-    public void onHudRender(DrawContext context, float tickDelta) {
+    public void onHudRender(DrawContext context, RenderTickCounter counter){
         if (!SypWidClient.CONFIG.enableSpeedOmeter)
             return;
         MinecraftClient client = MinecraftClient.getInstance();
@@ -34,8 +35,8 @@ public class SpeedOmeterRenderEvent implements HudRenderCallback {
 
         if (SypWidClient.CONFIG.changeColors) {
             // Every tick determine if speeds are increasing or decreasing and set color accordingly
-            tickCounter += tickDelta;
-            if (tickCounter >= (float)SypWidClient.CONFIG.tickInterval) {
+//            tickCounter += counter.getTickDelta(true);
+            if (counter.getLastDuration() >= (float)SypWidClient.CONFIG.tickInterval) {
                 if (currentSpeed < lastFrameSpeed) {
                     color = SypWidClient.CONFIG.deceleratingColor;
                 } else if (currentSpeed > lastFrameSpeed) {
@@ -54,7 +55,6 @@ public class SpeedOmeterRenderEvent implements HudRenderCallback {
 
                 lastFrameSpeed = currentSpeed;
                 lastFrameVertSpeed = currentVertSpeed;
-                tickCounter = 0.0f;
             }
         }
 
