@@ -1,4 +1,4 @@
-package sypztep.sypwid.client;
+package sypztep.sypwid.client.util;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.effect.StatusEffects;

@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import sypztep.sypwid.client.SypWidClient;
-import sypztep.sypwid.client.HealthBar;
+import sypztep.sypwid.client.util.HealthBar;
 
 
 @Mixin(InGameHud.class)

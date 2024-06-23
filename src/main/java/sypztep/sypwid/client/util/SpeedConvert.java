@@ -1,5 +1,7 @@
-package sypztep.sypwid.client;
+package sypztep.sypwid.client.util;
 
+
+import sypztep.sypwid.client.SypWidConfig;
 
 public class SpeedConvert {
     public static String speedText(double speed, SypWidConfig.SpeedUnit speedUnit) {

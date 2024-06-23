@@ -5,10 +5,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import sypztep.sypwid.client.SpeedConvert;
+import sypztep.sypwid.client.util.SpeedConvert;
 import sypztep.sypwid.client.SypWidClient;
 import sypztep.sypwid.client.SypWidConfig;
 
