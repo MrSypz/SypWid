@@ -1,4 +1,4 @@
-package sypztep.sypwid.mixin;
+package sypztep.sypwid.mixin.healthgui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
