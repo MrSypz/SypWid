@@ -5,6 +5,9 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Config(name = SypWidClient.MODID)
 @Config.Gui.Background("minecraft:textures/block/dirt.png")
 
@@ -49,13 +52,10 @@ public class SypWidConfig implements ConfigData {
     @ConfigEntry.Category("speedometer")
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
     public SpeedUnit speedUnit = SpeedUnit.BLOCKS_PER_SECOND;
+    @ConfigEntry.Category("sort")
+    public List<String> sortOrder = Arrays.asList("Gyat"
+    );
 
-    @ConfigEntry.Category("sortfeature")
-    @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.DROPDOWN)
-    public SortAlgorithm sortAlgorithm = SortAlgorithm.BUBBLE_SORT;
-    @ConfigEntry.Category("sortfeature")
-    @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.DROPDOWN)
-    public SortBy sortBy = SortBy.NAME;
 
     public enum Position {
         BOTTOM_LEFT, BOTTOM_RIGHT, TOP_LEFT, TOP_RIGHT
@@ -66,8 +66,5 @@ public class SypWidConfig implements ConfigData {
     }
     public enum SortAlgorithm {
         SELECTION_SORT, BUBBLE_SORT, MERGE_SORT, QUICK_SORT
-    }
-    public enum SortBy {
-        NAME, ID, CATEGORY
     }
 }

@@ -10,8 +10,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import sypztep.sypwid.client.SypWidClient;
-import sypztep.sypwid.client.SypWidConfig;
-import sypztep.sypwid.client.util.Sort;
 
 public class SortWidgetButton extends ClickableWidget {
 
@@ -44,103 +42,11 @@ public class SortWidgetButton extends ClickableWidget {
         DefaultedList<Slot> slots = screen.getScreenHandler().slots;
         assert client.player != null;
         int syncId = client.player.currentScreenHandler.syncId;
-        sortInventory(client, slots, syncId);
+
     }
 
     @Override
     protected void appendClickableNarrations(NarrationMessageBuilder builder) {
         //Voice thing Bruh
     }
-
-    private void sortInventory(MinecraftClient client, DefaultedList<Slot> slots, int syncId) {
-        switch (SypWidClient.CONFIG.sortAlgorithm) {
-            case BUBBLE_SORT:
-                sortUsingBubbleSort(client, slots, syncId, SypWidClient.CONFIG.sortBy);
-                break;
-//            case SELECTION_SORT:
-//                sortUsingSelectionSort(client, slots, syncId, SypWidClient.CONFIG.sortBy);
-//                break;
-//            case MERGE_SORT:
-//                sortUsingMergeSort(client, slots, syncId, SypWidClient.CONFIG.sortBy);
-//                break;
-//            case QUICK_SORT:
-//                sortUsingQuickSort(client, slots, syncId, SypWidClient.CONFIG.sortBy);
-//                break;
-            default:
-                // Default to bubble sort by name if an unknown algorithm is provided
-                sortUsingBubbleSort(client, slots, syncId, SypWidConfig.SortBy.NAME);
-                break;
-        }
-    }
-
-    private void sortUsingBubbleSort(MinecraftClient client, DefaultedList<Slot> slots, int syncId, SypWidConfig.SortBy sortBy) {
-        switch (sortBy) {
-            case NAME:
-                Sort.BUBBLE_SORT.by("NAME").doSort(client, syncId, slots, startIndex, endIndex);
-                break;
-            case ID:
-                Sort.BUBBLE_SORT.by("ID").doSort(client, syncId, slots, startIndex, endIndex);
-                break;
-            case CATEGORY:
-                Sort.BUBBLE_SORT.by("CATEGORY").doSort(client, syncId, slots, startIndex, endIndex);
-                break;
-            default:
-                // Default to sorting by name if an unknown sortBy value is provided
-                Sort.BUBBLE_SORT.by("NAME").doSort(client, syncId, slots, startIndex, endIndex);
-                break;
-        }
-    }
-
-//    private void sortUsingSelectionSort(MinecraftClient client, DefaultedList<Slot> slots, int syncId,  SypWidConfig.SortBy sortBy) {
-//        switch (sortBy) {
-//            case NAME:
-//                Sort.SELECTION_SORT.by("NAME").doSort(client, slots, startIndex, endIndex);
-//                break;
-//            case ID:
-//                Sort.SELECTION_SORT.by("ID").doSort(client, slots, startIndex, endIndex);
-//                break;
-//            case CATEGORY:
-//                Sort.SELECTION_SORT.by("CATEGORY").doSort(client, slots, startIndex, endIndex);
-//                break;
-//            default:
-//                // Default to sorting by name if an unknown sortBy value is provided
-//                Sort.SELECTION_SORT.by("NAME").doSort(client, slots, startIndex, endIndex);
-//                break;
-//        }
-//    }
-
-//    private void sortUsingMergeSort(MinecraftClient client, DefaultedList<Slot> slots, int syncId, SypWidConfig.SortBy sortBy) {
-//        switch (sortBy) {
-//            case NAME:
-//                Sort.MERGE_SORT.by("NAME").doSort(client, slots, startIndex, endIndex);
-//                break;
-//            case ID:
-//                Sort.MERGE_SORT.by("ID").doSort(client, slots, startIndex, endIndex);
-//                break;
-//            case CATEGORY:
-//                Sort.MERGE_SORT.by("CATEGORY").doSort(client, slots, startIndex, endIndex);
-//                break;
-//            default:
-//                // Default to sorting by name if an unknown sortBy value is provided
-//                Sort.MERGE_SORT.by("NAME").doSort(client, slots, startIndex, endIndex);
-//                break;
-//        }
-//    }
-//
-//    private void sortUsingQuickSort(MinecraftClient client, DefaultedList<Slot> slots, int syncId, SypWidConfig.SortBy sortBy) {
-//        switch (sortBy) {
-//            case NAME:
-//                Sort.QUICK_SORT.by("NAME").doSort(client, slots, startIndex, endIndex);
-//                break;
-//            case ID:
-//                Sort.QUICK_SORT.by("ID").doSort(client, slots, startIndex, endIndex);
-//                break;
-//            case CATEGORY:
-//                Sort.QUICK_SORT.by("CATEGORY").doSort(client, slots, startIndex, endIndex);
-//                break;
-//            default:
-//                // Default to sorting by name if an unknown sortBy value is provided
-//                Sort.QUICK_SORT.by("NAME").doSort(client, slots, startIndex, endIndex);
-//                break;
-//        }
 }
