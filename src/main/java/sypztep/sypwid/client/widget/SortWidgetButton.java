@@ -10,6 +10,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import sypztep.sypwid.client.SypWidClient;
+import sypztep.sypwid.client.util.Sort;
 
 public class SortWidgetButton extends ClickableWidget {
 
@@ -27,7 +28,6 @@ public class SortWidgetButton extends ClickableWidget {
 
         this.screen = screen;
     }
-
     @Override
     protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         context.drawGuiTexture(BUTTON_TEXTURE, this.getX(), this.getY(), this.getWidth(), this.getHeight());
@@ -35,7 +35,10 @@ public class SortWidgetButton extends ClickableWidget {
         if (this.isHovered())
             context.drawGuiTexture(BUTTON_HOVER_TEXTURE, this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }
-
+    @Override
+    protected void appendClickableNarrations(NarrationMessageBuilder builder) {
+        //Voice thing Bruh
+    }
     @Override
     public void onClick(double mouseX, double mouseY) {
         MinecraftClient client = MinecraftClient.getInstance();
@@ -43,10 +46,5 @@ public class SortWidgetButton extends ClickableWidget {
         assert client.player != null;
         int syncId = client.player.currentScreenHandler.syncId;
 
-    }
-
-    @Override
-    protected void appendClickableNarrations(NarrationMessageBuilder builder) {
-        //Voice thing Bruh
     }
 }
