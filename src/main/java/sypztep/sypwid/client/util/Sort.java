@@ -12,11 +12,15 @@ import sypztep.sypwid.client.SypWidClient;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Abstract base class for sorting algorithms.
  */
 public abstract class Sort {
+    private static final int MAX_THREADS = 4; // Maximum number of threads to use
+    private static final ExecutorService executor = Executors.newFixedThreadPool(MAX_THREADS); // ExecutorService for managing threads
 
 
     /**
