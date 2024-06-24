@@ -56,10 +56,14 @@ public class SypWidConfig implements ConfigData {
     public SpeedUnit speedUnit = SpeedUnit.BLOCKS_PER_SECOND;
     @ConfigEntry.Category("sort")
     public List<String> sortOrder = Arrays.asList(
+            "armor",
+            "tools",
             "blocks",
+            "items",
             "stackables",
-            "count",
-            "damage"
+            "unstackables",
+            "damage",
+            "count"
     );
 
     public enum Position {

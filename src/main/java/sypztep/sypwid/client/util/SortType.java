@@ -1,21 +1,17 @@
 package sypztep.sypwid.client.util;
 
-import com.google.common.collect.Lists;
-import net.minecraft.block.Block;
 import net.minecraft.item.*;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.registry.entry.RegistryEntry;
 
 import java.util.Comparator;
-import java.util.List;
+
+import static net.minecraft.item.ArmorMaterials.*;
+import static net.minecraft.item.ArmorMaterials.NETHERITE;
 
 /**
  * Utility class containing various static Comparator implementations for sorting ItemStacks based on different criteria.
  */
 public class SortType {
-
     /**
      * Comparator to place BlockItems before non-BlockItems.
      */
@@ -49,79 +45,74 @@ public class SortType {
      * Comparator to compare ItemStacks based on the count (descending order).
      */
     public static final Comparator<ItemStack> COUNT = Comparator.comparingInt(ItemStack::getCount).reversed();
+    /**
+     * Comparator to place ToolItems based on their material strength, from lowest to highest.
+     */
+    public static final Comparator<ItemStack> TOOLS = (lhs, rhs) -> {
+        ToolItem leftTool = lhs.getItem() instanceof ToolItem ? (ToolItem) lhs.getItem() : null;
+        ToolItem rightTool = rhs.getItem() instanceof ToolItem ? (ToolItem) rhs.getItem() : null;
+
+        // Handle cases where either left or right ItemStack is not a ToolItem
+        if (leftTool == null && rightTool == null) return 0;
+        if (leftTool == null) return 1;
+        if (rightTool == null) return -1;
+
+        // Compare ToolMaterials based on their strength index
+        int leftMaterial = getToolIndex(leftTool.getMaterial());
+        int rightMaterial = getToolIndex(rightTool.getMaterial());
+
+        return Integer.compare(leftMaterial, rightMaterial);
+    };
 
     /**
-     * Creates a Comparator that compares ItemStacks based on their identity.
-     *
-     * @param id Identifier of the item to compare against.
-     * @return A Comparator for comparing ItemStacks based on identity.
+     * Comparator to place ArmorItems based on their material strength, from lowest to highest.
      */
-    public static Comparator<ItemStack> item(Identifier id) {
-        return (lhs, rhs) -> {
-            Item item = Registries.ITEM.get(id);
-            return lhs.isOf(item) ? -1 : (rhs.isOf(item) ? 1 : 0);
-        };
-    }
+    public static final Comparator<ItemStack> ARMOR = (lhs, rhs) -> {
+        ArmorItem leftArmor = lhs.getItem() instanceof ArmorItem ? (ArmorItem) lhs.getItem() : null;
+        ArmorItem rightArmor = rhs.getItem() instanceof ArmorItem ? (ArmorItem) rhs.getItem() : null;
 
-    /**
-     * Creates a Comparator that compares ItemStacks based on whether they belong to a specific tag.
-     *
-     * @param id Identifier of the tag to compare against.
-     * @return A Comparator for comparing ItemStacks based on tags.
-     */
-    public static Comparator<ItemStack> itemTag(Identifier id) {
-        return (lhs, rhs) -> lhs.isIn(TagKey.of(RegistryKeys.ITEM, id)) ? -1 : (rhs.isIn(TagKey.of(RegistryKeys.ITEM, id)) ? 1 : 0);
-    }
+        // Handle cases where either left or right ItemStack is not an ArmorItem
+        if (leftArmor == null && rightArmor == null) return 0;
+        if (leftArmor == null) return 1;
+        if (rightArmor == null) return -1;
 
-    /**
-     * Creates a Comparator that compares ItemStacks based on whether they belong to a specific block tag.
-     *
-     * @param id Identifier of the block tag to compare against.
-     * @return A Comparator for comparing ItemStacks based on block tags.
-     */
-    public static Comparator<ItemStack> blockTag(Identifier id) {
-        return (lhs, rhs) -> {
-            Item lItem = lhs.getItem();
-            Item rItem = rhs.getItem();
+        // Compare ArmorMaterials based on their strength index
+        int leftCritChance = getArmorIndex(leftArmor.getMaterial());
+        int rightCritChance = getArmorIndex(rightArmor.getMaterial());
 
-            boolean lBlockTag = lItem instanceof BlockItem && Block.getBlockFromItem(lItem).getDefaultState().isIn(TagKey.of(RegistryKeys.BLOCK, id));
-            boolean rBlockTag = rItem instanceof BlockItem && Block.getBlockFromItem(rItem).getDefaultState().isIn(TagKey.of(RegistryKeys.BLOCK, id));
+        return Integer.compare(leftCritChance, rightCritChance);
+    };
 
-            return lBlockTag ? -1 : (rBlockTag ? 1 : 0);
-        };
-    }
-
-    /**
-     * Creates a Comparator that compares ItemStacks based on whether they belong to a specific item group.
-     *
-     * @param id Identifier of the item group to compare against.
-     * @return A Comparator for comparing ItemStacks based on item groups.
-     */
-    public static Comparator<ItemStack> itemGroup(Identifier id) {
-        return (lhs, rhs) -> {
-            ItemGroup group = Registries.ITEM_GROUP.get(id);
-            if (group == null) return 0;
-            return group.contains(lhs) ? -1 : (group.contains(rhs) ? 1 : 0);
-        };
-    }
-
-    /**
-     * Creates a Comparator that compares ItemStacks based on their order in a specific item group.
-     *
-     * @param id Identifier of the item group to compare against.
-     * @return A Comparator for comparing ItemStacks based on item group order.
-     */
-    public static Comparator<ItemStack> itemGroupOrder(Identifier id) {
-        return (lhs, rhs) -> {
-            ItemGroup group = Registries.ITEM_GROUP.get(id);
-            if (group == null) return 0;
-            List<ItemStack> tabStacks = Lists.newArrayList(group.getSearchTabStacks());
-            for (int i = 0; i < tabStacks.size(); ++i) {
-                Item item = tabStacks.get(i).getItem();
-                if (lhs.isOf(item)) return -1;
-                if (rhs.isOf(item)) return 1;
-            }
+    private static int getToolIndex(ToolMaterial toolMaterial) {
+        if (toolMaterial.equals(ToolMaterials.WOOD)) {
+            return 5;
+        } else if (toolMaterial.equals(ToolMaterials.STONE)) {
+            return 4;
+        } else if (toolMaterial.equals(ToolMaterials.IRON)) {
+            return 3;
+        } else if (toolMaterial.equals(ToolMaterials.GOLD)) {
+            return 2;
+        } else if (toolMaterial.equals(ToolMaterials.DIAMOND)) {
+            return 1;
+        } else if (toolMaterial.equals(ToolMaterials.NETHERITE)) {
             return 0;
-        };
+        } else return -999;
+    }
+
+    private static int getArmorIndex(RegistryEntry<ArmorMaterial> armorMaterial) {
+        if (armorMaterial.equals(LEATHER)) {
+            return 5;
+        } else if (armorMaterial.equals(IRON)) {
+            return 4;
+        } else if (armorMaterial.equals(GOLD)) {
+            return 3;
+        } else if (armorMaterial.equals(CHAIN)) {
+            return 2;
+        } else if (armorMaterial.equals(DIAMOND)) {
+            return 1;
+        } else if (armorMaterial.equals(NETHERITE)) {
+            return 0;
+        } else
+        return -999;
     }
 }

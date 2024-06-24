@@ -3,6 +3,9 @@ package sypztep.sypwid.client.util;
 import net.minecraft.item.*;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import sypztep.sypwid.client.SypWidClient;
 
@@ -51,6 +54,7 @@ public abstract class Sort {
         public Sorting(String name) {
             super(name);
         }
+
         /**
          * Compares two ItemStacks based on specific criteria:
          * - Empty status
@@ -75,6 +79,7 @@ public abstract class Sort {
             if (right.isEmpty()) {
                 return -1;
             }
+
             // Initialize comparators based on sortOrder
             List<Comparator<ItemStack>> comparators = new ArrayList<>();
             for (String sort : SypWidClient.CONFIG.sortOrder) {
@@ -97,35 +102,14 @@ public abstract class Sort {
                     case "count":
                         comparators.add(SortType.COUNT);
                         break;
-                    default:
-                        String[] split = sort.split("[/:]");
-                        if (split.length == 1) {
-                            continue;
-                        }
-                        Identifier id = Identifier.of(split[1], split[2]);
-                        switch (split[0]) {
-                            case "item":
-                                comparators.add(SortType.item(id));
-                                break;
-                            case "item_tag":
-                                comparators.add(SortType.itemTag(id));
-                                break;
-                            case "block_tag":
-                                comparators.add(SortType.blockTag(id));
-                                break;
-                            case "item_group":
-                                comparators.add(SortType.itemGroup(id));
-                                break;
-                            case "item_group_order":
-                                comparators.add(SortType.itemGroupOrder(id));
-                                break;
-                            default:
-                                break;
-                        }
+                    case "armor":
+                        comparators.add(SortType.ARMOR);
+                        break;
+                    case "tools":
+                        comparators.add(SortType.TOOLS);
                         break;
                 }
             }
-
             // Compare using the initialized comparators
             for (Comparator<ItemStack> comparator : comparators) {
                 int result = comparator.compare(left, right);
@@ -218,7 +202,14 @@ public abstract class Sort {
         @Override
         public void doSort(ServerPlayerEntity player, int syncId, List<Slot> slots, int startIndex, int endIndex) {
             ItemStack[] temp = new ItemStack[endIndex - startIndex + 1];
+            long start = System.nanoTime();
             mergeSort(slots, startIndex, endIndex, temp);
+            long end = System.nanoTime();
+
+            double elapsedTimeMillis = (end - start) / 1_000_000.0; // Convert nanoseconds to milliseconds with decimal
+
+            player.sendMessageToClient(Text.literal("Merge sort took " + elapsedTimeMillis + " milliseconds"), true);
+            player.playSoundToPlayer(SoundEvents.ITEM_BRUSH_BRUSHING_SAND, SoundCategory.PLAYERS, 1.0f, 1.2f);
 
             // Add sorted items back and clear remaining slots
             int index = startIndex;
