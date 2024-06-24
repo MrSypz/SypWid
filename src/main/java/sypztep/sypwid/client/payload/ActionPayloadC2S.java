@@ -8,7 +8,7 @@ import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.screen.ScreenHandler;
 import sypztep.sypwid.client.SypWidClient;
-import sypztep.sypwid.client.util.SortAction;
+import sypztep.sypwid.client.util.ActionContainer;
 
 public record ActionPayloadC2S(byte select) implements CustomPayload {
     public static final Id<ActionPayloadC2S> ID = new Id<>(SypWidClient.id("action_payload"));
@@ -29,11 +29,11 @@ public record ActionPayloadC2S(byte select) implements CustomPayload {
         public void receive(ActionPayloadC2S payload, ServerPlayNetworking.Context context) {
             ScreenHandler container = context.player().currentScreenHandler;
             if (payload.select() == 0)
-                SortAction.deposit(container);
+                ActionContainer.deposit(container);
             else if (payload.select() == 1)
-                SortAction.depositAll(container);
+                ActionContainer.depositAll(container);
             else if (payload.select() == 2)
-                SortAction.lootAll(container);
+                ActionContainer.lootAll(container);
         }
     }
 }

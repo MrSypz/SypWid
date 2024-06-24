@@ -9,7 +9,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.List;
 
-public class SortAction {
+public class ActionContainer {
     public static void deposit(ScreenHandler screenHandler) {
         int size = screenHandler.getSlot(0).inventory.size();
         for (int i = size; i < size + 27; ++i) {
