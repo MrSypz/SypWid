@@ -38,9 +38,8 @@ public record SortPayloadC2S(int syncId,int startIndex, int endIndex, byte algor
             var player = context.player();
             List<Slot> slots = context.player().currentScreenHandler.slots;
             switch (payload.algorithm) {
-                case 0: Sort.MERGESORT.doSort(player, payload.syncId(), slots, payload.startIndex(), payload.endIndex());
-                break;
-                case 1: Sort.BUBBLE_SORT.doSort(player, payload.syncId(), slots, payload.startIndex(), payload.endIndex());
+                case 0: Sort.MERGESORT.doSort(player, payload.syncId(), slots, payload.startIndex(), payload.endIndex()); break;
+                case 1: Sort.BUBBLE_SORT.doSort(player, payload.syncId(), slots, payload.startIndex(), payload.endIndex()); break;
             }
         }
     }

@@ -14,29 +14,17 @@ import org.lwjgl.glfw.GLFW;
 import sypztep.sypwid.client.SypWidClient;
 import sypztep.sypwid.client.payload.ActionPayloadC2S;
 
+import java.util.Collections;
+
 @Environment(EnvType.CLIENT)
-public class DepositWidgetButton extends ClickableWidget {
+public final class DepositWidgetButton extends ActionWidgetButton {
     private static final Identifier BUTTON_TEXTURE = SypWidClient.id("hud/bar/container/deposit");
     private static final Identifier BUTTON_HOVER_TEXTURE = SypWidClient.id("hud/bar/container/deposit_hover");
 
-    private HandledScreen<?> screen;
-
     public DepositWidgetButton(int x, int y, int width, int height, Text message, HandledScreen<?> screen) {
-        super(x, y, width, height, message);
-
-
-        this.screen = screen;
-    }
-    @Override
-    protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
-        context.drawGuiTexture(BUTTON_TEXTURE, this.getX(), this.getY(), this.getWidth(), this.getHeight());
-
-        if (this.isHovered())
-            context.drawGuiTexture(BUTTON_HOVER_TEXTURE, this.getX(), this.getY(), this.getWidth(), this.getHeight());
-    }
-    @Override
-    protected void appendClickableNarrations(NarrationMessageBuilder builder) {
-        //Voice thing Bruh
+        super(x, y, width, height, message, screen, BUTTON_TEXTURE, BUTTON_HOVER_TEXTURE,
+                Collections.singletonList(Text.literal("Deposit items")),
+                Collections.singletonList(Text.literal("Deposit all items")));
     }
     @Override
     public void onClick(double mouseX, double mouseY) {

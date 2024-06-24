@@ -7,18 +7,10 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
-import org.lwjgl.glfw.GLFW;
 import sypztep.sypwid.client.SypWidClient;
 import sypztep.sypwid.client.payload.SortPayloadC2S;
-import sypztep.sypwid.client.util.Sort;
-import sypztep.sypwid.client.util.SortType;
-
-import java.util.List;
 @Environment(EnvType.CLIENT)
 public class SortWidgetButton extends ClickableWidget {
     private static final Identifier BUTTON_TEXTURE = SypWidClient.id("hud/bar/container/sort");
@@ -32,7 +24,6 @@ public class SortWidgetButton extends ClickableWidget {
 
         this.startIndex = startIndex;
         this.endIndex = endIndex;
-
         this.screen = screen;
     }
     @Override

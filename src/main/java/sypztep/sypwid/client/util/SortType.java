@@ -21,26 +21,22 @@ public class SortType {
     /**
      * Comparator to place BlockItems before non-BlockItems.
      */
-    public static final Comparator<ItemStack> BLOCKS = (lhs, rhs) ->
-            lhs.getItem() instanceof BlockItem ? -1 : (rhs.getItem() instanceof BlockItem ? 1 : 0);
+    public static final Comparator<ItemStack> BLOCKS = (left, right) -> left.getItem() instanceof BlockItem ? -1 : (right.getItem() instanceof BlockItem ? 1 : 0);
 
     /**
      * Comparator to place non-BlockItems before BlockItems.
      */
-    public static final Comparator<ItemStack> ITEMS = (lhs, rhs) ->
-            !(lhs.getItem() instanceof BlockItem) ? -1 : (!(rhs.getItem() instanceof BlockItem) ? 1 : 0);
+    public static final Comparator<ItemStack> ITEMS = (left, right) -> !(left.getItem() instanceof BlockItem) ? -1 : (!(right.getItem() instanceof BlockItem) ? 1 : 0);
 
     /**
      * Comparator to place stackable items (maxCount > 1) before non-stackable items.
      */
-    public static final Comparator<ItemStack> STACKABLES = (lhs, rhs) ->
-            lhs.getMaxCount() > 1 ? -1 : (rhs.getMaxCount() > 1 ? 1 : 0);
+    public static final Comparator<ItemStack> STACKABLES = (left, right) -> left.getMaxCount() > 1 ? -1 : (right.getMaxCount() > 1 ? 1 : 0);
 
     /**
      * Comparator to place non-stackable items (maxCount == 1) before stackable items.
      */
-    public static final Comparator<ItemStack> UNSTACKABLES = (lhs, rhs) ->
-            lhs.getMaxCount() == 1 ? -1 : (rhs.getMaxCount() == 1 ? 1 : 0);
+    public static final Comparator<ItemStack> UNSTACKABLES = (left, right) -> left.getMaxCount() == 1 ? -1 : (right.getMaxCount() == 1 ? 1 : 0);
 
     // ---------- Attribute Comparators ----------
 
@@ -59,9 +55,9 @@ public class SortType {
     /**
      * Comparator to place ToolItems based on their material strength, from lowest to highest.
      */
-    public static final Comparator<ItemStack> TOOLS = (lhs, rhs) -> {
-        ToolItem leftTool = lhs.getItem() instanceof ToolItem ? (ToolItem) lhs.getItem() : null;
-        ToolItem rightTool = rhs.getItem() instanceof ToolItem ? (ToolItem) rhs.getItem() : null;
+    public static final Comparator<ItemStack> TOOLS = (left, right) -> {
+        ToolItem leftTool = left.getItem() instanceof ToolItem ? (ToolItem) left.getItem() : null;
+        ToolItem rightTool = right.getItem() instanceof ToolItem ? (ToolItem) right.getItem() : null;
 
         // Handle cases where either left or right ItemStack is not a ToolItem
         if (leftTool == null && rightTool == null) return 0;
@@ -78,9 +74,9 @@ public class SortType {
     /**
      * Comparator to place ArmorItems based on their material strength, from lowest to highest.
      */
-    public static final Comparator<ItemStack> ARMOR = (lhs, rhs) -> {
-        ArmorItem leftArmor = lhs.getItem() instanceof ArmorItem ? (ArmorItem) lhs.getItem() : null;
-        ArmorItem rightArmor = rhs.getItem() instanceof ArmorItem ? (ArmorItem) rhs.getItem() : null;
+    public static final Comparator<ItemStack> ARMOR = (left, right) -> {
+        ArmorItem leftArmor = left.getItem() instanceof ArmorItem ? (ArmorItem) left.getItem() : null;
+        ArmorItem rightArmor = right.getItem() instanceof ArmorItem ? (ArmorItem) right.getItem() : null;
 
         // Handle cases where either left or right ItemStack is not an ArmorItem
         if (leftArmor == null && rightArmor == null) return 0;
@@ -95,8 +91,7 @@ public class SortType {
     };
 
     public static Comparator<ItemStack> itemGroupOrder(Identifier id) {
-        return (lhs, rhs) ->
-        {
+        return (left, right) -> {
             ItemGroup group = Registries.ITEM_GROUP.get(id);
 
             if (group == null) {
@@ -111,10 +106,10 @@ public class SortType {
             for (int i = 0; i < foo.size(); ++i) {
                 Item item = foo.get(i).getItem();
 
-                if (lhs.isOf(item)) {
+                if (left.isOf(item)) {
                     l = i;
                 }
-                if (rhs.isOf(item)) {
+                if (right.isOf(item)) {
                     r = i;
                 }
             }
