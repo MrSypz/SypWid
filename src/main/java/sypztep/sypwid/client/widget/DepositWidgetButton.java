@@ -7,29 +7,23 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
+import org.lwjgl.glfw.GLFW;
 import sypztep.sypwid.client.SypWidClient;
-import sypztep.sypwid.client.payload.SortPayloadC2S;
-import sypztep.sypwid.client.util.Sort;
-import sypztep.sypwid.client.util.SortType;
+import sypztep.sypwid.client.payload.ActionPayloadC2S;
 
-import java.util.List;
 @Environment(EnvType.CLIENT)
-public class SortWidgetButton extends ClickableWidget {
-    private static final Identifier BUTTON_TEXTURE = SypWidClient.id("hud/bar/container/sort");
-    private static final Identifier BUTTON_HOVER_TEXTURE = SypWidClient.id("hud/bar/container/sort_hover");
+public class DepositWidgetButton extends ClickableWidget {
+    private static final Identifier BUTTON_TEXTURE = SypWidClient.id("hud/bar/container/deposit");
+    private static final Identifier BUTTON_HOVER_TEXTURE = SypWidClient.id("hud/bar/container/deposit_hover");
 
-    private int startIndex, endIndex;
     private HandledScreen<?> screen;
 
-    public SortWidgetButton(int x, int y, int width, int height, Text message, int startIndex, int endIndex, HandledScreen<?> screen) {
+    public DepositWidgetButton(int x, int y, int width, int height, Text message, HandledScreen<?> screen) {
         super(x, y, width, height, message);
 
-        this.startIndex = startIndex;
-        this.endIndex = endIndex;
 
         this.screen = screen;
     }
@@ -46,11 +40,10 @@ public class SortWidgetButton extends ClickableWidget {
     }
     @Override
     public void onClick(double mouseX, double mouseY) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        assert client.player != null;
-        int syncId = client.player.currentScreenHandler.syncId;
-        byte algorithm = SypWidClient.CONFIG.sortAlgorithm.getByteValue();
-
-        SortPayloadC2S.send(syncId,startIndex,endIndex,algorithm);
+        boolean isShiftHeld = InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT);
+        if (isShiftHeld)
+            ActionPayloadC2S.send((byte) 1);
+         else
+            ActionPayloadC2S.send((byte) 0);
     }
 }

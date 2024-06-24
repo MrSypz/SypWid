@@ -11,12 +11,18 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import sypztep.sypwid.client.widget.DepositWidgetButton;
+import sypztep.sypwid.client.widget.LootWidgetButton;
 import sypztep.sypwid.client.widget.SortWidgetButton;
 
 @Mixin(GenericContainerScreen.class)
 public abstract class GenericContainerScreenMixin extends HandledScreen<GenericContainerScreenHandler>  {
     @Unique
     private SortWidgetButton sortWidgetButton;
+    @Unique
+    private DepositWidgetButton depositWidgetButton;
+    @Unique
+    private LootWidgetButton lootWidgetButton;
 
     public GenericContainerScreenMixin(GenericContainerScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
@@ -26,19 +32,28 @@ public abstract class GenericContainerScreenMixin extends HandledScreen<GenericC
     public void init() {
         super.init();
 
-        int x = this.x + this.backgroundWidth - 20;
+        int x = this.x + this.backgroundWidth - 15;
         int y = this.y + 4;
-        int width = 12;
-        int height = 12;
+        int width = 9;
+        int height = 9;
         sortWidgetButton = new SortWidgetButton(x, y, width, height, Text.literal("S"), 0, getScreenHandler().slots.size() - 37, this);
+        depositWidgetButton = new DepositWidgetButton(x, y + this.backgroundHeight - 100, width, height, Text.literal("Deposit"), this);
+        lootWidgetButton = new LootWidgetButton(x - 12, y + this.backgroundHeight - 100, width, height, Text.literal("Loot"), this);
 
         this.addDrawableChild(sortWidgetButton);
+        this.addDrawableChild(depositWidgetButton);
+        this.addDrawableChild(lootWidgetButton);
     }
 
     @Inject(method = "render", at = @At("RETURN"))
     private void onRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        if (sortWidgetButton != null) {
+        if (sortWidgetButton != null)
             sortWidgetButton.render(context, mouseX, mouseY, delta);
-        }
+
+        if (depositWidgetButton != null)
+            depositWidgetButton.render(context, mouseX, mouseY, delta);
+
+        if (lootWidgetButton != null)
+            lootWidgetButton.render(context, mouseX, mouseY, delta);
     }
 }

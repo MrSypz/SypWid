@@ -24,8 +24,8 @@ public abstract class InventoryScreenMixin extends HandledScreen<PlayerScreenHan
 
     @Inject(method = "init", at = @At("RETURN"))
     private void onInit(CallbackInfo ci) {
-        int width = 12;
-        int height = 12;
+        int width = 9;
+        int height = 9;
 
         inventorySortButton = new SortWidgetButton(0, 0, width, height, Text.literal("S"), 9, 35, this);
 
@@ -37,8 +37,8 @@ public abstract class InventoryScreenMixin extends HandledScreen<PlayerScreenHan
     @Inject(method = "render", at = @At("RETURN"))
     private void onRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (inventorySortButton != null) {
-            inventorySortButton.setX(this.x + this.backgroundWidth - 20);
-            inventorySortButton.setY(this.height / 2 - 15);
+            inventorySortButton.setX(this.x + this.backgroundWidth - 18);
+            inventorySortButton.setY(this.height / 2 - 12);
 
             inventorySortButton.render(context, mouseX, mouseY, delta);
         }
