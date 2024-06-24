@@ -5,7 +5,9 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Config(name = SypWidClient.MODID)
@@ -53,9 +55,12 @@ public class SypWidConfig implements ConfigData {
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
     public SpeedUnit speedUnit = SpeedUnit.BLOCKS_PER_SECOND;
     @ConfigEntry.Category("sort")
-    public List<String> sortOrder = Arrays.asList("Gyat"
+    public List<String> sortOrder = Arrays.asList(
+            "blocks",
+            "stackables",
+            "count",
+            "damage"
     );
-
 
     public enum Position {
         BOTTOM_LEFT, BOTTOM_RIGHT, TOP_LEFT, TOP_RIGHT
@@ -63,8 +68,5 @@ public class SypWidConfig implements ConfigData {
 
     public enum SpeedUnit {
         BLOCKS_PER_SECOND, KILOMETERS_PER_HOUR
-    }
-    public enum SortAlgorithm {
-        SELECTION_SORT, BUBBLE_SORT, MERGE_SORT, QUICK_SORT
     }
 }

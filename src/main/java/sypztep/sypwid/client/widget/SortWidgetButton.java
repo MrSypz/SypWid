@@ -10,7 +10,11 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import sypztep.sypwid.client.SypWidClient;
+import sypztep.sypwid.client.payload.SortPayloadC2S;
 import sypztep.sypwid.client.util.Sort;
+import sypztep.sypwid.client.util.SortType;
+
+import java.util.List;
 
 public class SortWidgetButton extends ClickableWidget {
 
@@ -42,9 +46,8 @@ public class SortWidgetButton extends ClickableWidget {
     @Override
     public void onClick(double mouseX, double mouseY) {
         MinecraftClient client = MinecraftClient.getInstance();
-        DefaultedList<Slot> slots = screen.getScreenHandler().slots;
         assert client.player != null;
         int syncId = client.player.currentScreenHandler.syncId;
-
+        SortPayloadC2S.send(syncId,startIndex,endIndex);
     }
 }

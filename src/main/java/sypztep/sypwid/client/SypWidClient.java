@@ -5,8 +5,9 @@ import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.util.Identifier;
-import sypztep.sypwid.event.ElytraRenderEvent;
-import sypztep.sypwid.event.SpeedOmeterRenderEvent;
+import sypztep.sypwid.client.event.ElytraRenderEvent;
+import sypztep.sypwid.client.event.SpeedOmeterRenderEvent;
+import sypztep.sypwid.client.util.SortType;
 
 public class SypWidClient implements ClientModInitializer {
     public static final String MODID = "sypwid";

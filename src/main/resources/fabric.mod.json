@@ -12,11 +12,14 @@
   "icon": "assets/sypwid/icon.png",
   "environment": "*",
   "entrypoints": {
+    "main": [
+      "sypztep.sypwid.common.SypWid"
+    ],
     "client": [
       "sypztep.sypwid.client.SypWidClient"
     ],
     "modmenu": [
-      "sypztep.sypwid.compat.ModMenuIntegration"
+      "sypztep.sypwid.client.compat.ModMenuIntegration"
     ]
   },
   "mixins": [

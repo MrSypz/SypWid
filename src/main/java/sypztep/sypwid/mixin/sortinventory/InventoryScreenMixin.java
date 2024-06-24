@@ -29,6 +29,8 @@ public abstract class InventoryScreenMixin extends HandledScreen<PlayerScreenHan
 
         inventorySortButton = new SortWidgetButton(0, 0, width, height, Text.literal("S"), 9, 35, this);
 
+        setButtonCoordinates();
+
         this.addDrawableChild(inventorySortButton);
     }
 
@@ -40,5 +42,11 @@ public abstract class InventoryScreenMixin extends HandledScreen<PlayerScreenHan
 
             inventorySortButton.render(context, mouseX, mouseY, delta);
         }
+    }
+
+    @Unique
+    private void setButtonCoordinates() {
+        inventorySortButton.setX(this.x + this.backgroundWidth - 20);
+        inventorySortButton.setY(this.height / 2 - 15);
     }
 }

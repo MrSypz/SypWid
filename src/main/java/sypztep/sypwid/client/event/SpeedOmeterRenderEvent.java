@@ -1,4 +1,4 @@
-package sypztep.sypwid.event;
+package sypztep.sypwid.client.event;
 
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
