@@ -12,16 +12,11 @@ import sypztep.sypwid.client.SypWidClient;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Abstract base class for sorting algorithms.
  */
 public abstract class Sort {
-    private static final int MAX_THREADS = 4; // Maximum number of threads to use
-    private static final ExecutorService executor = Executors.newFixedThreadPool(MAX_THREADS); // ExecutorService for managing threads
-
 
     /**
      * The name of the sorting algorithm.
@@ -199,6 +194,7 @@ public abstract class Sort {
         protected void sortSound(ServerPlayerEntity player) {
             player.playSoundToPlayer(SoundEvents.ITEM_BRUSH_BRUSHING_SAND, SoundCategory.PLAYERS, 1.0f, 1.2f);
         }
+
         /**
          * Checks if all slots from startIndex to endIndex are empty.
          *
@@ -244,21 +240,20 @@ public abstract class Sort {
          */
         @Override
         public void doSort(ServerPlayerEntity player, int syncId, List<Slot> slots, int startIndex, int endIndex) {
+
             ItemStack[] temp = new ItemStack[endIndex - startIndex + 1];
             long start = System.nanoTime();
 
-            // Perform sorting only if there are non-empty slots
             if (!allSlotsEmpty(slots, startIndex, endIndex)) {
                 mergeSort(slots, startIndex, endIndex, temp);
             }
 
             long end = System.nanoTime();
 
-            double elapsedTimeMillis = (end - start) / 1_000_000.0; // Convert nanoseconds to milliseconds with decimal
+            double elapsedTimeMillis = (end - start) / 1_000_000.0;
 
             player.sendMessageToClient(Text.literal(MERGESORT.name + " " + elapsedTimeMillis + " milliseconds"), true);
 
-            // Clear remaining slots if sorting was performed
             if (!allSlotsEmpty(slots, startIndex, endIndex)) {
                 int index = startIndex;
                 for (ItemStack stack : temp) {
@@ -268,7 +263,6 @@ public abstract class Sort {
 
                 collapseItems(slots, startIndex, endIndex);
 
-                // Clear remaining slots
                 for (int i = index; i <= endIndex; i++) {
                     slots.get(i).setStack(ItemStack.EMPTY);
                 }
@@ -285,7 +279,8 @@ public abstract class Sort {
          * @param endIndex   The ending index of the range to sort.
          * @param temp       The temporary array used for merging.
          */
-        private void mergeSort(List<Slot> slots, int startIndex, int endIndex, ItemStack[] temp) {
+        public void mergeSort(List<Slot> slots, int startIndex, int endIndex, ItemStack[] temp) {
+
             if (startIndex < endIndex) {
                 int mid = (startIndex + endIndex) / 2;
                 mergeSort(slots, startIndex, mid, temp);  // Sort left half
@@ -356,23 +351,18 @@ public abstract class Sort {
          */
         @Override
         public void doSort(ServerPlayerEntity player, int syncId, List<Slot> slots, int startIndex, int endIndex) {
-            // Check if all slots from startIndex to endIndex are empty
             if (allSlotsEmpty(slots, startIndex, endIndex)) {
-                return; // No need to sort if all slots are empty
+                return;
             }
 
-            // Perform Bubble Sort
             long start = System.nanoTime();
             bubbleSort(slots, startIndex, endIndex);
             long end = System.nanoTime();
 
-            // Calculate elapsed time
             double elapsedTimeMillis = (end - start) / 1_000_000.0;
 
-            // Send sorting time to client
             player.sendMessageToClient(Text.literal(BUBBLE_SORT.name + " " + elapsedTimeMillis + " milliseconds"), true);
 
-            // Play sound after sorting
             sortSound(player);
         }
 
@@ -384,10 +374,9 @@ public abstract class Sort {
          * @param endIndex   The ending index of the range to sort.
          */
         private void bubbleSort(List<Slot> slots, int startIndex, int endIndex) {
-            int n = endIndex - startIndex + 1; // Number of elements to sort
-            int[] indices = new int[n]; // Array to hold indices of slots
+            int n = endIndex - startIndex + 1;
+            int[] indices = new int[n];
 
-            // Initialize indices array with the indices of slots
             for (int i = 0; i < n; i++) {
                 indices[i] = startIndex + i;
             }
@@ -400,10 +389,8 @@ public abstract class Sort {
                     int slotIndex1 = indices[j];
                     int slotIndex2 = indices[j + 1];
                     if (compareItems(slots.get(slotIndex1).getStack(), slots.get(slotIndex2).getStack()) > 0) {
-                        // Swap items (directly in the slots list)
                         swapItems(slots, slotIndex1, slotIndex2);
 
-                        // Update indices array to reflect the swapped positions
                         int temp = indices[j];
                         indices[j] = indices[j + 1];
                         indices[j + 1] = temp;
@@ -411,7 +398,6 @@ public abstract class Sort {
                         swapped = true;
                     }
                 }
-                // If no elements were swapped, break out of the loop
                 if (!swapped) {
                     break;
                 }
@@ -424,7 +410,7 @@ public abstract class Sort {
         /**
          * Swaps items between two slots in the given list.
          *
-         * @param slots The list of slots containing items.
+         * @param slots  The list of slots containing items.
          * @param index1 Index of the first slot.
          * @param index2 Index of the second slot.
          */

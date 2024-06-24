@@ -94,33 +94,27 @@ public class SortType {
         return Integer.compare(leftCritChance, rightCritChance);
     };
 
-    public static Comparator<ItemStack> itemGroupOrder(Identifier id)
-    {
+    public static Comparator<ItemStack> itemGroupOrder(Identifier id) {
         return (lhs, rhs) ->
         {
             ItemGroup group = Registries.ITEM_GROUP.get(id);
 
-            if (group == null)
-            {
+            if (group == null) {
                 return 0;
             }
 
-            ItemStack[] arr = group.getSearchTabStacks().toArray(new ItemStack[0]);
             var foo = Lists.newArrayList(group.getSearchTabStacks());
 
             int l = 0;
             int r = 0;
 
-            for (int i = 0; i < foo.size(); ++i)
-            {
+            for (int i = 0; i < foo.size(); ++i) {
                 Item item = foo.get(i).getItem();
 
-                if (lhs.isOf(item))
-                {
+                if (lhs.isOf(item)) {
                     l = i;
                 }
-                if (rhs.isOf(item))
-                {
+                if (rhs.isOf(item)) {
                     r = i;
                 }
             }
