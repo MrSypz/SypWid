@@ -1,7 +1,10 @@
 package sypztep.sypwid.client.util;
 
+import com.google.common.collect.Lists;
 import net.minecraft.item.*;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.Identifier;
 
 import java.util.Comparator;
 
@@ -12,6 +15,9 @@ import static net.minecraft.item.ArmorMaterials.NETHERITE;
  * Utility class containing various static Comparator implementations for sorting ItemStacks based on different criteria.
  */
 public class SortType {
+
+    // ---------- Item Type Comparators ----------
+
     /**
      * Comparator to place BlockItems before non-BlockItems.
      */
@@ -36,6 +42,8 @@ public class SortType {
     public static final Comparator<ItemStack> UNSTACKABLES = (lhs, rhs) ->
             lhs.getMaxCount() == 1 ? -1 : (rhs.getMaxCount() == 1 ? 1 : 0);
 
+    // ---------- Attribute Comparators ----------
+
     /**
      * Comparator to compare ItemStacks based on the damage value (ascending order).
      */
@@ -45,6 +53,9 @@ public class SortType {
      * Comparator to compare ItemStacks based on the count (descending order).
      */
     public static final Comparator<ItemStack> COUNT = Comparator.comparingInt(ItemStack::getCount).reversed();
+
+    // ---------- Category Comparators ----------
+
     /**
      * Comparator to place ToolItems based on their material strength, from lowest to highest.
      */
@@ -83,6 +94,42 @@ public class SortType {
         return Integer.compare(leftCritChance, rightCritChance);
     };
 
+    public static Comparator<ItemStack> itemGroupOrder(Identifier id)
+    {
+        return (lhs, rhs) ->
+        {
+            ItemGroup group = Registries.ITEM_GROUP.get(id);
+
+            if (group == null)
+            {
+                return 0;
+            }
+
+            ItemStack[] arr = group.getSearchTabStacks().toArray(new ItemStack[0]);
+            var foo = Lists.newArrayList(group.getSearchTabStacks());
+
+            int l = 0;
+            int r = 0;
+
+            for (int i = 0; i < foo.size(); ++i)
+            {
+                Item item = foo.get(i).getItem();
+
+                if (lhs.isOf(item))
+                {
+                    l = i;
+                }
+                if (rhs.isOf(item))
+                {
+                    r = i;
+                }
+            }
+
+            return l - r;
+        };
+    }
+    // ---------- Helper Methods ----------
+
     private static int getToolIndex(ToolMaterial toolMaterial) {
         if (toolMaterial.equals(ToolMaterials.WOOD)) {
             return 5;
@@ -112,7 +159,6 @@ public class SortType {
             return 1;
         } else if (armorMaterial.equals(NETHERITE)) {
             return 0;
-        } else
-        return -999;
+        } else return -999;
     }
 }

@@ -108,6 +108,20 @@ public abstract class Sort {
                     case "tools":
                         comparators.add(SortType.TOOLS);
                         break;
+                    default:
+                        String[] split = sort.split("[/:]");
+                        if (split.length == 1) {
+                            continue;
+                        }
+                        Identifier id = Identifier.of(split[1], split[2]);
+                        switch (split[0]) {
+                            case "item_group_order":
+                                comparators.add(SortType.itemGroupOrder(id));
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
                 }
             }
             // Compare using the initialized comparators
