@@ -1,9 +1,7 @@
 package sypztep.sypwid.client.util;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.item.*;
+import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -11,12 +9,15 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import sypztep.sypwid.client.SypWidClient;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Abstract base class for sorting algorithms.
  */
 public abstract class Sort {
+
 
     /**
      * The name of the sorting algorithm.
@@ -143,7 +144,6 @@ public abstract class Sort {
          * @param endIndex   Arrays
          */
         protected void collapseItems(List<Slot> slots, int startIndex, int endIndex) {
-            // Traverse from end to start to check and merge stackable items
             for (int i = endIndex; i >= startIndex; i--) {
                 ItemStack currentStack = slots.get(i).getStack();
                 if (currentStack.isEmpty()) continue;
@@ -262,9 +262,10 @@ public abstract class Sort {
                     index++;
                 }
 
+                collapseItems(slots, startIndex, endIndex);
+
                 // Clear remaining slots
                 for (int i = index; i <= endIndex; i++) {
-                    collapseItems(slots, startIndex, endIndex);
                     slots.get(i).setStack(ItemStack.EMPTY);
                 }
             }
@@ -351,6 +352,34 @@ public abstract class Sort {
          */
         @Override
         public void doSort(ServerPlayerEntity player, int syncId, List<Slot> slots, int startIndex, int endIndex) {
+            // Check if all slots from startIndex to endIndex are empty
+            if (allSlotsEmpty(slots, startIndex, endIndex)) {
+                return; // No need to sort if all slots are empty
+            }
+
+            // Perform Bubble Sort
+            long start = System.nanoTime();
+            bubbleSort(slots, startIndex, endIndex);
+            long end = System.nanoTime();
+
+            // Calculate elapsed time
+            double elapsedTimeMillis = (end - start) / 1_000_000.0;
+
+            // Send sorting time to client
+            player.sendMessageToClient(Text.literal(BUBBLE_SORT.name + " " + elapsedTimeMillis + " milliseconds"), true);
+
+            // Play sound after sorting
+            sortSound(player);
+        }
+
+        /**
+         * Perform optimized Bubble Sort on the slots within the given range.
+         *
+         * @param slots      The list of slots to be sorted.
+         * @param startIndex The starting index of the range to sort.
+         * @param endIndex   The ending index of the range to sort.
+         */
+        private void bubbleSort(List<Slot> slots, int startIndex, int endIndex) {
             int n = endIndex - startIndex + 1; // Number of elements to sort
             int[] indices = new int[n]; // Array to hold indices of slots
 
@@ -360,7 +389,6 @@ public abstract class Sort {
             }
 
             // Implementing optimized Bubble Sort
-            long start = System.nanoTime();
             boolean swapped;
             for (int i = 0; i < n - 1; i++) {
                 swapped = false;
@@ -381,32 +409,25 @@ public abstract class Sort {
                 }
                 // If no elements were swapped, break out of the loop
                 if (!swapped) {
-                    collapseItems(slots, startIndex, endIndex);
                     break;
                 }
             }
 
-
-            long end = System.nanoTime();
-            double elapsedTimeMillis = (end - start) / 1_000_000.0; // Convert nanoseconds to milliseconds with decimal
-
-            player.sendMessageToClient(Text.literal(BUBBLE_SORT.name + " " + elapsedTimeMillis + " milliseconds"), true);
-            sortSound(player);
+            // After sorting, collapse empty slots
+            collapseItems(slots, startIndex, endIndex);
         }
 
         /**
-         * Swaps two items in the slots using client interaction.
+         * Swaps items between two slots in the given list.
          *
-         * @param slotIndex1 The index of the first slot to swap.
-         * @param slotIndex2 The index of the second slot to swap.
+         * @param slots The list of slots containing items.
+         * @param index1 Index of the first slot.
+         * @param index2 Index of the second slot.
          */
-        private void swapItems(List<Slot> slots, int slotIndex1, int slotIndex2) {
-            Slot slot1 = slots.get(slotIndex1);
-            Slot slot2 = slots.get(slotIndex2);
-            // Swap the ItemStacks in the slots
-            ItemStack temp = slot1.getStack();
-            slot1.setStack(slot2.getStack());
-            slot2.setStack(temp);
+        private void swapItems(List<Slot> slots, int index1, int index2) {
+            ItemStack temp = slots.get(index1).getStack().copy();
+            slots.get(index1).setStack(slots.get(index2).getStack());
+            slots.get(index2).setStack(temp);
         }
     }
 }
