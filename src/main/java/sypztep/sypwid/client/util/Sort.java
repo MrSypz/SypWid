@@ -1,7 +1,9 @@
 package sypztep.sypwid.client.util;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.*;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -141,34 +143,32 @@ public abstract class Sort {
          * @param endIndex   Arrays
          */
         protected void collapseItems(List<Slot> slots, int startIndex, int endIndex) {
-            Set<Item> processedItems = new HashSet<>();
+            // Traverse from end to start to check and merge stackable items
+            for (int i = endIndex; i >= startIndex; i--) {
+                ItemStack currentStack = slots.get(i).getStack();
+                if (currentStack.isEmpty()) continue;
 
-            for (int i = startIndex; i < endIndex; i++) {
-                ItemStack leftStack = slots.get(i).getStack();
-                if (leftStack.isEmpty() || processedItems.contains(leftStack.getItem())) continue;
-                processedItems.add(leftStack.getItem());
+                for (int j = i - 1; j >= startIndex; j--) {
+                    ItemStack compareStack = slots.get(j).getStack();
+                    if (compareStack.isEmpty()) continue;
 
-                for (int j = i + 1; j <= endIndex; j++) {
-                    ItemStack rightStack = slots.get(j).getStack();
-                    if (rightStack.isEmpty()) continue;
-
-                    if (leftStack.isOf(rightStack.getItem())) {
-                        int maxStackSize = leftStack.getMaxCount();
-                        int leftCount = leftStack.getCount();
-                        int rightCount = rightStack.getCount();
-                        int combinedCount = leftCount + rightCount;
+                    if (currentStack.isOf(compareStack.getItem())) {
+                        int maxStackSize = currentStack.getMaxCount();
+                        int currentCount = currentStack.getCount();
+                        int compareCount = compareStack.getCount();
+                        int combinedCount = currentCount + compareCount;
 
                         if (combinedCount <= maxStackSize) {
-                            leftStack.setCount(combinedCount);
-                            rightStack.setCount(0);
+                            currentStack.setCount(combinedCount);
+                            compareStack.setCount(0);
                             slots.get(j).setStack(ItemStack.EMPTY);
                         } else {
-                            leftStack.setCount(maxStackSize);
-                            rightStack.setCount(combinedCount - maxStackSize);
+                            currentStack.setCount(maxStackSize);
+                            compareStack.setCount(combinedCount - maxStackSize);
                         }
 
-                        slots.get(i).setStack(leftStack);
-                        slots.get(j).setStack(rightStack);
+                        slots.get(i).setStack(currentStack);
+                        slots.get(j).setStack(compareStack);
                     }
                 }
             }
@@ -185,6 +185,31 @@ public abstract class Sort {
                     emptySlot++;
                 }
             }
+        }
+
+        /**
+         * Plays a sound after sorting.
+         *
+         * @param player The player to whom the sound will be played.
+         */
+        protected void sortSound(ServerPlayerEntity player) {
+            player.playSoundToPlayer(SoundEvents.ITEM_BRUSH_BRUSHING_SAND, SoundCategory.PLAYERS, 1.0f, 1.2f);
+        }
+        /**
+         * Checks if all slots from startIndex to endIndex are empty.
+         *
+         * @param slots      The list of slots to check.
+         * @param startIndex The starting index of the range to check.
+         * @param endIndex   The ending index of the range to check.
+         * @return true if all slots are empty, false otherwise.
+         */
+        protected boolean allSlotsEmpty(List<Slot> slots, int startIndex, int endIndex) {
+            for (int i = startIndex; i <= endIndex; i++) {
+                if (!slots.get(i).getStack().isEmpty()) {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 
@@ -217,28 +242,34 @@ public abstract class Sort {
         public void doSort(ServerPlayerEntity player, int syncId, List<Slot> slots, int startIndex, int endIndex) {
             ItemStack[] temp = new ItemStack[endIndex - startIndex + 1];
             long start = System.nanoTime();
-            mergeSort(slots, startIndex, endIndex, temp);
+
+            // Perform sorting only if there are non-empty slots
+            if (!allSlotsEmpty(slots, startIndex, endIndex)) {
+                mergeSort(slots, startIndex, endIndex, temp);
+            }
+
             long end = System.nanoTime();
 
             double elapsedTimeMillis = (end - start) / 1_000_000.0; // Convert nanoseconds to milliseconds with decimal
 
-            player.sendMessageToClient(Text.literal("Merge sort took " + elapsedTimeMillis + " milliseconds"), true);
-            player.playSoundToPlayer(SoundEvents.ITEM_BRUSH_BRUSHING_SAND, SoundCategory.PLAYERS, 1.0f, 1.2f);
+            player.sendMessageToClient(Text.literal(MERGESORT.name + " " + elapsedTimeMillis + " milliseconds"), true);
 
-            // Add sorted items back and clear remaining slots
-            int index = startIndex;
-            for (ItemStack stack : temp) {
-                slots.get(index).setStack(stack);
-                index++;
+            // Clear remaining slots if sorting was performed
+            if (!allSlotsEmpty(slots, startIndex, endIndex)) {
+                int index = startIndex;
+                for (ItemStack stack : temp) {
+                    slots.get(index).setStack(stack);
+                    index++;
+                }
+
+                // Clear remaining slots
+                for (int i = index; i <= endIndex; i++) {
+                    collapseItems(slots, startIndex, endIndex);
+                    slots.get(i).setStack(ItemStack.EMPTY);
+                }
             }
 
-            // Clear remaining slots
-            for (int i = index; i <= endIndex; i++) {
-                slots.get(i).setStack(ItemStack.EMPTY);
-            }
-
-            // Collapse items after sorting
-            collapseItems(slots, startIndex, endIndex);
+            sortSound(player);
         }
 
         /**
@@ -298,6 +329,84 @@ public abstract class Sort {
             for (int i = leftStart; i <= rightEnd; i++) {
                 slots.get(i).setStack(temp[i - leftStart]);
             }
+        }
+    }
+
+    public static BubbleSort BUBBLE_SORT = new BubbleSort();
+
+    public static class BubbleSort extends Sorting {
+        /**
+         * Constructs a specific sorting algorithm with the specified name.
+         */
+        public BubbleSort() {
+            super("BubbleSort");
+        }
+
+        /**
+         * @param player     The Minecraft client instance.
+         * @param syncId     The synchronization ID of the screen handler.
+         * @param slots      The list of slots to be sorted.
+         * @param startIndex The starting index of the range to sort.
+         * @param endIndex   The ending index of the range to sort.
+         */
+        @Override
+        public void doSort(ServerPlayerEntity player, int syncId, List<Slot> slots, int startIndex, int endIndex) {
+            int n = endIndex - startIndex + 1; // Number of elements to sort
+            int[] indices = new int[n]; // Array to hold indices of slots
+
+            // Initialize indices array with the indices of slots
+            for (int i = 0; i < n; i++) {
+                indices[i] = startIndex + i;
+            }
+
+            // Implementing optimized Bubble Sort
+            long start = System.nanoTime();
+            boolean swapped;
+            for (int i = 0; i < n - 1; i++) {
+                swapped = false;
+                for (int j = 0; j < n - i - 1; j++) {
+                    int slotIndex1 = indices[j];
+                    int slotIndex2 = indices[j + 1];
+                    if (compareItems(slots.get(slotIndex1).getStack(), slots.get(slotIndex2).getStack()) > 0) {
+                        // Swap items (directly in the slots list)
+                        swapItems(slots, slotIndex1, slotIndex2);
+
+                        // Update indices array to reflect the swapped positions
+                        int temp = indices[j];
+                        indices[j] = indices[j + 1];
+                        indices[j + 1] = temp;
+
+                        swapped = true;
+                    }
+                }
+                // If no elements were swapped, break out of the loop
+                if (!swapped) {
+                    collapseItems(slots, startIndex, endIndex);
+                    break;
+                }
+            }
+
+
+            long end = System.nanoTime();
+            double elapsedTimeMillis = (end - start) / 1_000_000.0; // Convert nanoseconds to milliseconds with decimal
+
+            player.sendMessageToClient(Text.literal(BUBBLE_SORT.name + " " + elapsedTimeMillis + " milliseconds"), true);
+            sortSound(player);
+        }
+
+        /**
+         * Swaps two items in the slots using client interaction.
+         *
+         * @param slotIndex1 The index of the first slot to swap.
+         * @param slotIndex2 The index of the second slot to swap.
+         */
+        private void swapItems(List<Slot> slots, int slotIndex1, int slotIndex2) {
+            Slot slot1 = slots.get(slotIndex1);
+            Slot slot2 = slots.get(slotIndex2);
+            // Swap the ItemStacks in the slots
+            ItemStack temp = slot1.getStack();
+            slot1.setStack(slot2.getStack());
+            slot2.setStack(temp);
         }
     }
 }

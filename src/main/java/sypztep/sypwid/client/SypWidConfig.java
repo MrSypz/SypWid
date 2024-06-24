@@ -55,6 +55,9 @@ public class SypWidConfig implements ConfigData {
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
     public SpeedUnit speedUnit = SpeedUnit.BLOCKS_PER_SECOND;
     @ConfigEntry.Category("sort")
+    @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.DROPDOWN)
+    public SortAlgorithm sortAlgorithm = SortAlgorithm.BUBBLE_SORT;
+    @ConfigEntry.Category("sort")
     public List<String> sortOrder = Arrays.asList(
             "armor",
             "tools",
@@ -74,4 +77,19 @@ public class SypWidConfig implements ConfigData {
     public enum SpeedUnit {
         BLOCKS_PER_SECOND, KILOMETERS_PER_HOUR
     }
+    public enum SortAlgorithm {
+        MERGE_SORT((byte) 0),
+        BUBBLE_SORT((byte) 1);
+
+        private final byte byteValue;
+
+        SortAlgorithm(byte byteValue) {
+            this.byteValue = byteValue;
+        }
+
+        public byte getByteValue() {
+            return byteValue;
+        }
+    }
+
 }

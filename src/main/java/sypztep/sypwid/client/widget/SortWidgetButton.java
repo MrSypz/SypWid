@@ -1,5 +1,7 @@
 package sypztep.sypwid.client.widget;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -15,7 +17,7 @@ import sypztep.sypwid.client.util.Sort;
 import sypztep.sypwid.client.util.SortType;
 
 import java.util.List;
-
+@Environment(EnvType.CLIENT)
 public class SortWidgetButton extends ClickableWidget {
 
     private static final Identifier BUTTON_TEXTURE = SypWidClient.id("sort_button");
@@ -48,6 +50,8 @@ public class SortWidgetButton extends ClickableWidget {
         MinecraftClient client = MinecraftClient.getInstance();
         assert client.player != null;
         int syncId = client.player.currentScreenHandler.syncId;
-        SortPayloadC2S.send(syncId,startIndex,endIndex);
+        byte algorithm = SypWidClient.CONFIG.sortAlgorithm.getByteValue();
+
+        SortPayloadC2S.send(syncId,startIndex,endIndex,algorithm);
     }
 }
