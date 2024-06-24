@@ -62,7 +62,7 @@ public class SypWidConfig implements ConfigData {
             "items",
             "stackables",
             "unstackables",
-            "item_group_order/minecraft:search", //slowest one
+            "item_group_order/minecraft:search",
             "damage",
             "count"
     );

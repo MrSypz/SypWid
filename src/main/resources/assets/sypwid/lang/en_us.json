@@ -1,6 +1,7 @@
 {
   "text.autoconfig.sypwid.category.speedometer": "Speed O Meter",
   "text.autoconfig.sypwid.category.visual": "Gui Overhaul",
+  "text.autoconfig.sypwid.category.sort": "Sort Feature",
 
   "text.autoconfig.sypwid.option.newHealthbar": "New HealthBar",
   "text.autoconfig.sypwid.category.newArmor": "New Armor",
@@ -9,7 +10,7 @@
   "text.autoconfig.sypwid.category.textArmorNumber": "Text Armor",
   "text.autoconfig.sypwid.category.textArmorToughnessNumber": "Text ArmorToughness",
 
-  "text.autoconfig.sypwid.title": "Sypwid Options",
+  "text.autoconfig.sypwid.title": "Sypwid Config",
   "text.autoconfig.sypwid.option.enabled": "Mod enabled",
   "text.autoconfig.sypwid.option.showVertical": "Show vertical speed",
   "text.autoconfig.sypwid.option.changeColors": "Enable changing text color",
@@ -20,5 +21,6 @@
   "text.autoconfig.sypwid.option.acceleratingColor": "Accelerating text color",
   "text.autoconfig.sypwid.option.deceleratingColor": "Decelerating text color",
   "text.autoconfig.sypwid.option.position": "Position",
-  "text.autoconfig.sypwid.option.speedUnit": "Speed Unit"
+  "text.autoconfig.sypwid.option.speedUnit": "Speed Unit",
+  "text.autoconfig.sypwid.option.sortOrder": "Sort Order List"
 }
