@@ -116,12 +116,8 @@ public abstract class Sort {
                             continue;
                         }
                         Identifier id = Identifier.of(split[1], split[2]);
-                        switch (split[0]) {
-                            case "item_group_order":
-                                comparators.add(SortType.itemGroupOrder(id));
-                                break;
-                            default:
-                                break;
+                        if (split[0].equals("item_group_order")) {
+                            comparators.add(SortType.itemGroupOrder(id));
                         }
                         break;
                 }
@@ -351,50 +347,51 @@ public abstract class Sort {
          */
         @Override
         public void doSort(ServerPlayerEntity player, int syncId, List<Slot> slots, int startIndex, int endIndex) {
-            if (allSlotsEmpty(slots, startIndex, endIndex)) {
-                return;
-            }
+            ItemStack[] temp = new ItemStack[endIndex - startIndex + 1];
 
             long start = System.nanoTime();
-            bubbleSort(slots, startIndex, endIndex);
+
+            for (int i = startIndex; i <= endIndex; i++)
+                temp[i - startIndex] = slots.get(i).getStack();
+
+            if (!allSlotsEmpty(slots, startIndex, endIndex)) {
+                bubbleSort(temp);
+
+                int index = startIndex;
+                for (ItemStack stack : temp) {
+                    slots.get(index).setStack(stack);
+                    index++;
+                }
+
+                collapseItems(slots, startIndex, endIndex);
+
+                for (int i = index; i <= endIndex; i++)
+                    slots.get(i).setStack(ItemStack.EMPTY);
+            }
+
             long end = System.nanoTime();
 
-            double elapsedTimeMillis = (end - start) / 1_000_000.0;
 
+            double elapsedTimeMillis = (end - start) / 1_000_000.0;
             player.sendMessageToClient(Text.literal(BUBBLE_SORT.name + " " + elapsedTimeMillis + " milliseconds"), true);
 
             sortSound(player);
         }
 
         /**
-         * Perform optimized Bubble Sort on the slots within the given range.
-         *
-         * @param slots      The list of slots to be sorted.
-         * @param startIndex The starting index of the range to sort.
-         * @param endIndex   The ending index of the range to sort.
+         * @param temp A temp:)
          */
-        private void bubbleSort(List<Slot> slots, int startIndex, int endIndex) {
-            int n = endIndex - startIndex + 1;
-            int[] indices = new int[n];
-
-            for (int i = 0; i < n; i++) {
-                indices[i] = startIndex + i;
-            }
-
-            // Implementing optimized Bubble Sort
+        private void bubbleSort(ItemStack[] temp) {
+            int n = temp.length;
             boolean swapped;
             for (int i = 0; i < n - 1; i++) {
                 swapped = false;
                 for (int j = 0; j < n - i - 1; j++) {
-                    int slotIndex1 = indices[j];
-                    int slotIndex2 = indices[j + 1];
-                    if (compareItems(slots.get(slotIndex1).getStack(), slots.get(slotIndex2).getStack()) > 0) {
-                        swapItems(slots, slotIndex1, slotIndex2);
-
-                        int temp = indices[j];
-                        indices[j] = indices[j + 1];
-                        indices[j + 1] = temp;
-
+                    if (compareItems(temp[j], temp[j + 1]) > 0) {
+                        // Swap temp[j] and temp[j + 1]
+                        ItemStack tempStack = temp[j];
+                        temp[j] = temp[j + 1];
+                        temp[j + 1] = tempStack;
                         swapped = true;
                     }
                 }
@@ -402,22 +399,6 @@ public abstract class Sort {
                     break;
                 }
             }
-
-            // After sorting, collapse empty slots
-            collapseItems(slots, startIndex, endIndex);
-        }
-
-        /**
-         * Swaps items between two slots in the given list.
-         *
-         * @param slots  The list of slots containing items.
-         * @param index1 Index of the first slot.
-         * @param index2 Index of the second slot.
-         */
-        private void swapItems(List<Slot> slots, int index1, int index2) {
-            ItemStack temp = slots.get(index1).getStack().copy();
-            slots.get(index1).setStack(slots.get(index2).getStack());
-            slots.get(index2).setStack(temp);
         }
     }
 }

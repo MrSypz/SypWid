@@ -6,7 +6,6 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.util.Identifier;
 import sypztep.sypwid.client.event.ElytraRenderEvent;
-import sypztep.sypwid.client.event.SpeedOmeterRenderEvent;
 
 public class SypWidClient implements ClientModInitializer {
     public static final String MODID = "sypwid";
@@ -20,6 +19,5 @@ public class SypWidClient implements ClientModInitializer {
         CONFIG = AutoConfig.getConfigHolder(SypWidConfig.class).getConfig();
 
         HudRenderCallback.EVENT.register(new ElytraRenderEvent());
-        HudRenderCallback.EVENT.register(new SpeedOmeterRenderEvent());
     }
 }
