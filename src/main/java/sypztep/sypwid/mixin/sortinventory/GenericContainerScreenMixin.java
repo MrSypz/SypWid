@@ -20,6 +20,8 @@ public abstract class GenericContainerScreenMixin extends HandledScreen<GenericC
     @Unique
     private SortWidgetButton sortWidgetButton;
     @Unique
+    private SortWidgetButton invSortWidgetButton;
+    @Unique
     private DepositWidgetButton depositWidgetButton;
     @Unique
     private WithdrawWidgetButton withdrawWidgetButton;
@@ -34,14 +36,16 @@ public abstract class GenericContainerScreenMixin extends HandledScreen<GenericC
 
         int x = this.x + this.backgroundWidth - 15;
         int y = this.y + 4;
-        int width = 11;
-        int height = 12;
+        int width = 9;
+        int height = 9;
 
         sortWidgetButton = new SortWidgetButton(x, y, width, height, Text.literal("S"), 0, getScreenHandler().slots.size() - 37, this);
-        depositWidgetButton = new DepositWidgetButton(x, y + this.backgroundHeight - 100, width, height, Text.literal("Deposit"), this);
-        withdrawWidgetButton = new WithdrawWidgetButton(x - 12, y + this.backgroundHeight - 100, width, height, Text.literal("Loot"), this);
+        invSortWidgetButton = new SortWidgetButton(x, y + this.backgroundHeight - 100, width, height, Text.literal("S"), getScreenHandler().slots.size() - 36,getScreenHandler().slots.size() - 10, this);
+        depositWidgetButton = new DepositWidgetButton(x  - 12, y + this.backgroundHeight - 100, width, height, Text.literal("Deposit"), this);
+        withdrawWidgetButton = new WithdrawWidgetButton(x - 24, y + this.backgroundHeight - 100, width, height, Text.literal("Loot"), this);
 
         this.addDrawableChild(sortWidgetButton);
+        this.addDrawableChild(invSortWidgetButton);
         this.addDrawableChild(depositWidgetButton);
         this.addDrawableChild(withdrawWidgetButton);
     }
@@ -50,6 +54,9 @@ public abstract class GenericContainerScreenMixin extends HandledScreen<GenericC
     private void onRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (sortWidgetButton != null)
             sortWidgetButton.render(context, mouseX, mouseY, delta);
+
+        if (invSortWidgetButton != null)
+            invSortWidgetButton.render(context, mouseX, mouseY, delta);
 
         if (depositWidgetButton != null)
             depositWidgetButton.render(context, mouseX, mouseY, delta);

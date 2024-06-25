@@ -24,8 +24,8 @@ public abstract class InventoryScreenMixin extends HandledScreen<PlayerScreenHan
 
     @Inject(method = "init", at = @At("RETURN"))
     private void onInit(CallbackInfo ci) {
-        int width = 11;
-        int height = 12;
+        int width = 9;
+        int height = 9;
 
         inventorySortButton = new SortWidgetButton(0, 0, width, height, Text.literal("S"), 9, 35, this);
 

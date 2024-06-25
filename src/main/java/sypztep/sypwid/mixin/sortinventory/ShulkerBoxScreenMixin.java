@@ -34,8 +34,8 @@ public abstract class ShulkerBoxScreenMixin extends HandledScreen<ShulkerBoxScre
 
         int x = this.x + this.backgroundWidth - 15;
         int y = this.y + 4;
-        int width = 11;
-        int height = 12;
+        int width = 9;
+        int height = 9;
         sortWidgetButton = new SortWidgetButton(x, y, width, height, Text.literal("Sort"), 0, getScreenHandler().slots.size() - 37, this);
         depositWidgetButton = new DepositWidgetButton(x, y + this.backgroundHeight - 100, width, height, Text.literal("Deposit"), this);
         withdrawWidgetButton = new WithdrawWidgetButton(x - 12, y + this.backgroundHeight - 100, width, height, Text.literal("Loot"), this);

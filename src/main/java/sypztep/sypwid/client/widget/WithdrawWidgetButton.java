@@ -12,8 +12,8 @@ import java.util.Collections;
 
 @Environment(EnvType.CLIENT)
 public final class WithdrawWidgetButton extends ActionWidgetButton {
-    private static final Identifier BUTTON_TEXTURE = SypWidClient.id("hud/bar/container/loot");
-    private static final Identifier BUTTON_HOVER_TEXTURE = SypWidClient.id("hud/bar/container/loot_hover");
+    private static final Identifier BUTTON_TEXTURE = SypWidClient.id("hud/bar/container/withdraw");
+    private static final Identifier BUTTON_HOVER_TEXTURE = SypWidClient.id("hud/bar/container/withdraw_hover");
 
     public WithdrawWidgetButton(int x, int y, int width, int height, Text message, HandledScreen<?> screen) {
         super(x, y, width, height, message, screen,  BUTTON_TEXTURE, BUTTON_HOVER_TEXTURE,
