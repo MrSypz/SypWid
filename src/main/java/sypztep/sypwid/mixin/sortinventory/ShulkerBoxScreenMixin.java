@@ -34,14 +34,15 @@ public abstract class ShulkerBoxScreenMixin extends HandledScreen<ShulkerBoxScre
     public void init() {
         super.init();
 
-        int x = this.x + this.backgroundWidth - 15;
+        int x = this.x + this.backgroundWidth - 16;
         int y = this.y + 4;
         int width = 9;
         int height = 9;
-        sortWidgetButton = new SortWidgetButton(x, y, width, height, Text.literal("Sort"), 0, getScreenHandler().slots.size() - 37, this);
-        invSortWidgetButton = new SortWidgetButton(x, y + this.backgroundHeight - 100, width, height, Text.literal("S"), getScreenHandler().slots.size() - 36,getScreenHandler().slots.size() - 10, this);
-        depositWidgetButton = new DepositWidgetButton(x, y + this.backgroundHeight - 100, width, height, Text.literal("Deposit"), this);
-        withdrawWidgetButton = new WithdrawWidgetButton(x - 12, y + this.backgroundHeight - 100, width, height, Text.literal("Loot"), this);
+
+        sortWidgetButton = new SortWidgetButton(x, y + 1, width, height, Text.literal("Sort"), 0, getScreenHandler().slots.size() - 37, this);
+        invSortWidgetButton = new SortWidgetButton(x, y + this.backgroundHeight - 99, width, height, Text.literal("InvSort"), getScreenHandler().slots.size() - 36,getScreenHandler().slots.size() - 10, this);
+        depositWidgetButton = new DepositWidgetButton(x  - 12, y + this.backgroundHeight - 99, width, height, Text.literal("Deposit"), this);
+        withdrawWidgetButton = new WithdrawWidgetButton(x - 24, y + this.backgroundHeight - 99, width, height, Text.literal("Loot"), this);
 
         this.addDrawableChild(sortWidgetButton);
         this.addDrawableChild(invSortWidgetButton);
