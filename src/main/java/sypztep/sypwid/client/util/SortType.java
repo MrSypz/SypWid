@@ -16,7 +16,11 @@ import static net.minecraft.item.ArmorMaterials.NETHERITE;
  */
 public class SortType {
 
+    /**
+     * Comparator to place By Alphabet.
+     */
     // ---------- Item Type Comparators ----------
+    public static final Comparator<ItemStack> NAME = (left,right) -> left.getName().getString().compareTo(right.getName().getString());
 
     /**
      * Comparator to place BlockItems before non-BlockItems.
@@ -37,18 +41,6 @@ public class SortType {
      * Comparator to place non-stackable items (maxCount == 1) before stackable items.
      */
     public static final Comparator<ItemStack> UNSTACKABLES = (left, right) -> left.getMaxCount() == 1 ? -1 : (right.getMaxCount() == 1 ? 1 : 0);
-
-    // ---------- Attribute Comparators ----------
-
-    /**
-     * Comparator to compare ItemStacks based on the damage value (ascending order).
-     */
-    public static final Comparator<ItemStack> DAMAGE = Comparator.comparingInt(ItemStack::getDamage);
-
-    /**
-     * Comparator to compare ItemStacks based on the count (descending order).
-     */
-    public static final Comparator<ItemStack> COUNT = Comparator.comparingInt(ItemStack::getCount).reversed();
 
     // ---------- Category Comparators ----------
 
@@ -90,33 +82,6 @@ public class SortType {
         return Integer.compare(leftCritChance, rightCritChance);
     };
 
-    public static Comparator<ItemStack> itemGroupOrder(Identifier id) {
-        return (left, right) -> {
-            ItemGroup group = Registries.ITEM_GROUP.get(id);
-
-            if (group == null) {
-                return 0;
-            }
-
-            var foo = Lists.newArrayList(group.getSearchTabStacks());
-
-            int l = 0;
-            int r = 0;
-
-            for (int i = 0; i < foo.size(); ++i) {
-                Item item = foo.get(i).getItem();
-
-                if (left.isOf(item)) {
-                    l = i;
-                }
-                if (right.isOf(item)) {
-                    r = i;
-                }
-            }
-
-            return l - r;
-        };
-    }
     // ---------- Helper Methods ----------
 
     private static int getToolIndex(ToolMaterial toolMaterial) {

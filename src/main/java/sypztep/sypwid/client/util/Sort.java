@@ -70,22 +70,25 @@ public abstract class Sort {
          */
         protected int compareItems(ItemStack left, ItemStack right) {
             // Check if both items are empty
-            if (left.isEmpty() && right.isEmpty()) {
-                return 0;
-            }
-            // Check if only the left item is empty
-            if (left.isEmpty()) {
-                return 1;
-            }
-            // Check if only the right item is empty
-            if (right.isEmpty()) {
-                return -1;
-            }
+//            if (left.isEmpty() && right.isEmpty()) {
+//                return 0;
+//            }
+//            // Check if only the left item is empty
+//            if (left.isEmpty()) {
+//                return 1;
+//            }
+//            // Check if only the right item is empty
+//            if (right.isEmpty()) {
+//                return -1;
+//            }
 
             // Initialize comparators based on sortOrder
             List<Comparator<ItemStack>> comparators = new ArrayList<>();
             for (String sort : SypWidClient.CONFIG.sortOrder) {
                 switch (sort) {
+                    case "name":
+                        comparators.add(SortType.NAME);
+                        break;
                     case "blocks":
                         comparators.add(SortType.BLOCKS);
                         break;
@@ -98,28 +101,13 @@ public abstract class Sort {
                     case "unstackables":
                         comparators.add(SortType.UNSTACKABLES);
                         break;
-                    case "damage":
-                        comparators.add(SortType.DAMAGE);
-                        break;
-                    case "count":
-                        comparators.add(SortType.COUNT);
-                        break;
                     case "armor":
                         comparators.add(SortType.ARMOR);
                         break;
                     case "tools":
                         comparators.add(SortType.TOOLS);
                         break;
-                    default:
-                        String[] split = sort.split("[/:]");
-                        if (split.length == 1) {
-                            continue;
-                        }
-                        Identifier id = Identifier.of(split[1], split[2]);
-                        if (split[0].equals("item_group_order")) {
-                            comparators.add(SortType.itemGroupOrder(id));
-                        }
-                        break;
+                    default: break;
                 }
             }
             // Compare using the initialized comparators
@@ -129,7 +117,6 @@ public abstract class Sort {
                     return result;
                 }
             }
-            // If all comparators return 0 (items are considered equal by all criteria)
             return 0;
         }
 

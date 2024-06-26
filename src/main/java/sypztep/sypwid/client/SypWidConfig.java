@@ -37,13 +37,11 @@ public class SypWidConfig implements ConfigData {
     public List<String> sortOrder = Arrays.asList(
             "armor",
             "tools",
+            "name",
             "blocks",
             "items",
             "stackables",
-            "unstackables",
-            "item_group_order/minecraft:search",
-            "damage",
-            "count"
+            "unstackables"
     );
 
     public enum SortAlgorithm {
