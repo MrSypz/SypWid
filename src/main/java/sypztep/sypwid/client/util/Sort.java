@@ -6,7 +6,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import sypztep.sypwid.client.SypWidClient;
 
 import java.util.ArrayList;
@@ -69,19 +68,6 @@ public abstract class Sort {
          * @return A negative integer, zero, or a positive integer as the left ItemStack is less than, equal to, or greater than the right ItemStack.
          */
         protected int compareItems(ItemStack left, ItemStack right) {
-            // Check if both items are empty
-//            if (left.isEmpty() && right.isEmpty()) {
-//                return 0;
-//            }
-//            // Check if only the left item is empty
-//            if (left.isEmpty()) {
-//                return 1;
-//            }
-//            // Check if only the right item is empty
-//            if (right.isEmpty()) {
-//                return -1;
-//            }
-
             // Initialize comparators based on sortOrder
             List<Comparator<ItemStack>> comparators = new ArrayList<>();
             for (String sort : SypWidClient.CONFIG.sortOrder) {

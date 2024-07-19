@@ -5,9 +5,7 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Config(name = SypWidClient.MODID)
@@ -16,17 +14,59 @@ import java.util.List;
 public class SypWidConfig implements ConfigData {
     @Comment("New Healthbar")
     @ConfigEntry.Category("visual")
+    @ConfigEntry.Gui.Tooltip
     public boolean newHealthbar = true;
     @ConfigEntry.Category("visual")
+    @ConfigEntry.Gui.Tooltip
+    public int xoffsethealthbar = 0;
+    @ConfigEntry.Category("visual")
+    @ConfigEntry.Gui.Tooltip
+    public int yoffsethealthbar = 0;
+    @ConfigEntry.Category("visual")
+    @ConfigEntry.Gui.Tooltip
     public boolean newArmor = true;
     @ConfigEntry.Category("visual")
+    @ConfigEntry.Gui.Tooltip
+    public int xoffsetarmor = 0;
+    @ConfigEntry.Category("visual")
+    @ConfigEntry.Gui.Tooltip
+    public int yoffsetarmor = 0;
+    @ConfigEntry.Category("visual")
+    @ConfigEntry.Gui.Tooltip
     public boolean newAir = true;
     @ConfigEntry.Category("visual")
+    @ConfigEntry.Gui.Tooltip
+    public int xoffair = 0;
+    @ConfigEntry.Category("visual")
+    @ConfigEntry.Gui.Tooltip
+    public int yoffair = 0;
+    @ConfigEntry.Category("visual")
+    @ConfigEntry.Gui.Tooltip
     public boolean textHealthNumber = true;
     @ConfigEntry.Category("visual")
+    @ConfigEntry.Gui.Tooltip
+    public int xoffsettexthealthbar = 0;
+    @ConfigEntry.Category("visual")
+    @ConfigEntry.Gui.Tooltip
+    public int yoffsettexthealthbar = 0;
+    @ConfigEntry.Category("visual")
+    @ConfigEntry.Gui.Tooltip
     public boolean textArmorNumber = true;
     @ConfigEntry.Category("visual")
+    @ConfigEntry.Gui.Tooltip
+    public int xoffsettextarmor = 0;
+    @ConfigEntry.Category("visual")
+    @ConfigEntry.Gui.Tooltip
+    public int yoffsettextarmor = 0;
+    @ConfigEntry.Category("visual")
+    @ConfigEntry.Gui.Tooltip
     public boolean textArmorToughnessNumber = true;
+    @ConfigEntry.Category("visual")
+    @ConfigEntry.Gui.Tooltip
+    public int xoffsettextarmorToughness = 0;
+    @ConfigEntry.Category("visual")
+    @ConfigEntry.Gui.Tooltip
+    public int yoffsettextarmorToughness = 0;
 
     @ConfigEntry.Category("sort")
     @ConfigEntry.Gui.Tooltip(count = 1)

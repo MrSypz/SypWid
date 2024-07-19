@@ -57,20 +57,20 @@ public abstract class InGameHudMixin {
         else missingHealth--;
 
         RenderSystem.enableBlend();
-        HealthBar.drawContainerBar(context, x, y, blinking, player); // เหี้ยอะไรเนี่ย อ๋อ ทุกอย่างอยู่ใน Healthbar.java
+        HealthBar.drawContainerBar(context, x + SypWidClient.CONFIG.xoffsethealthbar , y + SypWidClient.CONFIG.yoffsethealthbar, blinking, player); // เหี้ยอะไรเนี่ย อ๋อ ทุกอย่างอยู่ใน Healthbar.java
 
         if (missingHealth != newHealth)
-            HealthBar.drawCustomSlateBar(context, x, y, HealthBar.SlateType.WHITE, missingHealth);
+            HealthBar.drawCustomSlateBar(context, x + SypWidClient.CONFIG.xoffsethealthbar , y + SypWidClient.CONFIG.yoffsethealthbar, HealthBar.SlateType.WHITE, missingHealth);
 
-        if (absorption > 0) HealthBar.drawCustomContainerBar(context, x, y, 8);
+        if (absorption > 0) HealthBar.drawCustomContainerBar(context, x + SypWidClient.CONFIG.xoffsethealthbar , y + SypWidClient.CONFIG.yoffsethealthbar, 8);
 
-        HealthBar.drawSlateBar(context, x, y, player, newHealth);
+        HealthBar.drawSlateBar(context, x + SypWidClient.CONFIG.xoffsethealthbar , y + SypWidClient.CONFIG.yoffsethealthbar, player, newHealth);
         /*        ใช้ของ vanilla         */
-        this.drawHeart(context, InGameHud.HeartType.CONTAINER, x, y, hardcore, blinking);
-        this.drawHeart(context, heartType, x, y, hardcore, false);
+        this.drawHeart(context, InGameHud.HeartType.CONTAINER, x + SypWidClient.CONFIG.xoffsethealthbar , y + SypWidClient.CONFIG.yoffsethealthbar, hardcore, blinking);
+        this.drawHeart(context, heartType, x + SypWidClient.CONFIG.xoffsethealthbar , y + SypWidClient.CONFIG.yoffsethealthbar, hardcore, false);
         if (SypWidClient.CONFIG.textHealthNumber) {
             String healthbar = HealthBar.DECI_FORMAT.format(player.getHealth() + player.getAbsorptionAmount()) + "/" + HealthBar.DECI_FORMAT.format(player.getMaxHealth());
-            context.drawTextWithShadow(this.getTextRenderer(), healthbar, x + 12, y + 1, 0xFFFFFF);
+            context.drawTextWithShadow(this.getTextRenderer(), healthbar, x + 12 + SypWidClient.CONFIG.xoffsettexthealthbar, y + 1 + SypWidClient.CONFIG.yoffsettexthealthbar, 0xFFFFFF);
         }
         context.setShaderColor(1, 1, 1, 1);
         RenderSystem.disableBlend();
@@ -87,15 +87,15 @@ public abstract class InGameHudMixin {
             return;
         }
         RenderSystem.enableBlend();
-        HealthBar.drawCustomContainerBar(context, x, y, 0); // เหี้ยอะไรเนี่ย อ๋อ ทุกอย่างอยู่ใน Healthbar.java
-        HealthBar.drawCustomSlateBar(context, x, y, HealthBar.SlateType.WHITE, armorbar);// แผ่นเกราะ
-        context.drawGuiTexture(ARMOR_TEXTURE, x, y, 9, 9);// icon เกราะ
+        HealthBar.drawCustomContainerBar(context, x + SypWidClient.CONFIG.xoffsetarmor, y + SypWidClient.CONFIG.yoffsetarmor, 0); // เหี้ยอะไรเนี่ย อ๋อ ทุกอย่างอยู่ใน Healthbar.java
+        HealthBar.drawCustomSlateBar(context,x + SypWidClient.CONFIG.xoffsetarmor, y + SypWidClient.CONFIG.yoffsetarmor ,HealthBar.SlateType.WHITE, armorbar);// แผ่นเกราะ
+        context.drawGuiTexture(ARMOR_TEXTURE, x + SypWidClient.CONFIG.xoffsetarmor, y + SypWidClient.CONFIG.yoffsetarmor, 9, 9);// icon เกราะ
         if (SypWidClient.CONFIG.textArmorNumber)
-            context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, String.valueOf(armor), x + 12, y + 1, 0xFFFFFF);
+            context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, String.valueOf(armor), x + 12 + SypWidClient.CONFIG.xoffsettextarmor, y + 1 + SypWidClient.CONFIG.yoffsettextarmor, 0xFFFFFF);
         if (armortoughness > 0) {
-            HealthBar.drawCustomContainerBar(context, x + 101, y, 0); // เหี้ยอะไรเนี่ย อ๋อ ทุกอย่างอยู่ใน Healthbar.java
-            HealthBar.drawCustomSlateBar(context, x + 101, y, HealthBar.SlateType.WHITE, armortoughnessbar); // แผ่นเกราะ
-            HealthBar.drawCustomSlateBar(context, x + 101, y - 1, 9, 9, HealthBar.SlateType.ARMORTOUGHNESS, 9, 9); // icon เกราะ
+            HealthBar.drawCustomContainerBar(context, x + 101 + SypWidClient.CONFIG.xoffsettextarmorToughness, y + SypWidClient.CONFIG.yoffsettextarmorToughness, 0); // เหี้ยอะไรเนี่ย อ๋อ ทุกอย่างอยู่ใน Healthbar.java
+            HealthBar.drawCustomSlateBar(context, x + 101 + SypWidClient.CONFIG.xoffsettextarmorToughness, y + SypWidClient.CONFIG.yoffsettextarmorToughness, HealthBar.SlateType.WHITE, armortoughnessbar); // แผ่นเกราะ
+            HealthBar.drawCustomSlateBar(context, x + 101 + SypWidClient.CONFIG.xoffsettextarmorToughness, y - 1 + SypWidClient.CONFIG.yoffsettextarmorToughness, 9, 9, HealthBar.SlateType.ARMORTOUGHNESS, 9, 9); // icon เกราะ
             if (SypWidClient.CONFIG.textArmorToughnessNumber)
                 context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, String.valueOf(armortoughness), x + 112, y + 1, 0xFFFFFF);
         }
@@ -112,9 +112,9 @@ public abstract class InGameHudMixin {
         int airLevel = (int) (100.0F * Math.max((float) player.getAir(), 0.0F) / (float) player.getMaxAir());
         RenderSystem.enableBlend();
         if (player.isSubmergedIn(FluidTags.WATER) || airLevel < 100) {
-            if (airLevel != 0) context.drawGuiTexture(AIR_TEXTURE, x + 2, y, 9, 9);
-            else context.drawGuiTexture(AIR_BURSTING_TEXTURE, x + 2, y, 9, 9);
-            context.drawText(this.client.textRenderer, "% " + airLevel, x, y - 10, 0xFFFFFF, true);
+            if (airLevel != 0) context.drawGuiTexture(AIR_TEXTURE, x + 2 + SypWidClient.CONFIG.xoffair, y + SypWidClient.CONFIG.yoffair, 9, 9);
+            else context.drawGuiTexture(AIR_BURSTING_TEXTURE, x + 2 + SypWidClient.CONFIG.xoffair, y + SypWidClient.CONFIG.yoffair, 9, 9);
+            context.drawText(this.client.textRenderer, "% " + airLevel, x + SypWidClient.CONFIG.xoffair, y - 10 + SypWidClient.CONFIG.yoffair, 0xFFFFFF, true);
         }
         RenderSystem.disableBlend();
         this.client.getProfiler().pop();
